@@ -5,6 +5,9 @@ class Order {
   
 
   static async createOrder(){
+
+    //Take a user's order and store in database
+
     const query = `SELECT * 
                     FROM products
                     `;
@@ -14,6 +17,8 @@ class Order {
   }
 
   static async listOrdersForUser(){
+
+    //Return all orders an authenticated user has
     const query = `SELECT * 
                     FROM products
                     `;
