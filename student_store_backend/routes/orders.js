@@ -1,20 +1,23 @@
 const express = require("express");
 const Order = require("../models/order");
+const security = require("../middleware/security")
 const router = express.Router();
 
-router.get("/", async (req, res, next) => {
+router.get("/", security.requireAuthenticatedUser, async (req, res, next) => {
   try {
-    const orders = await Order.listOrdersForUser()
-    res.status(200).json({ orders: orders });
+    const {user} = res.locals
+    const orders = await Order.listOrdersForUser(user)
+    return res.status(201).json({ orders: orders });
   } catch (err) {
     next(err);
   }
 });
 
-router.post("/", async (req, res, next) => {
+router.post("/", security.requireAuthenticatedUser, async (req, res, next) => {
     try {
-      const orders = await Order.createOrder();
-      res.status(200).json({ orders: orders });
+        const {user} = res.locals
+      const order = await Order.createOrder(user);
+      return res.status(200).json({ order: order });
     } catch (err) {
       next(err);
     }
